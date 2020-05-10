@@ -2,6 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
+import Button from '@material-ui/core/Button'
+import Modal from '@material-ui/core/Modal'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -12,6 +14,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import EmojiEmotions from '@material-ui/icons/EmojiEmotions'
 
+import SignupForm from './SignupForm'
+
 const drawerWidth = 240
 
 const useStyles = makeStyles((theme) => ({
@@ -20,6 +24,19 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
+  },
+  title: {
+    flexGrow: 1,
+  },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3)
   },
   drawer: {
     width: drawerWidth,
@@ -39,16 +56,36 @@ const useStyles = makeStyles((theme) => ({
 
 const MainLayout = ({ children, ...props }) => {
   const classes = useStyles()
-  console.log(props)
-  
+  const [open, setOpen] = React.useState(false)
+  const handleOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
   return (
     <div className={classes.root}>
       <CssBaseline />
+      <Modal
+        className={classes.modal}
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        <div className={classes.paper}>
+          <h1>Signup</h1>
+          <SignupForm />
+        </div>
+      </Modal>
       <AppBar position="fixed" className={classes.appBar}>
       <Toolbar>
-          <Typography variant="h6" noWrap>
+          <Typography variant="h6" className={classes.title} noWrap>
             YapWe
           </Typography>
+          <Button color="inherit" onClick={handleOpen}>Signup</Button>
+          <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>
       <Drawer
