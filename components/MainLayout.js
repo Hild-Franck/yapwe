@@ -15,6 +15,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import EmojiEmotions from '@material-ui/icons/EmojiEmotions'
 
 import SignupForm from './SignupForm'
+import { signup } from '../ducks/main'
 
 const drawerWidth = 240
 
@@ -54,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const MainLayout = ({ children, ...props }) => {
+const MainLayout = ({ children, dispatch, ...props }) => {
   const classes = useStyles()
   const [open, setOpen] = React.useState(false)
   const handleOpen = () => {
@@ -64,6 +65,11 @@ const MainLayout = ({ children, ...props }) => {
   const handleClose = () => {
     setOpen(false)
   }
+
+  const handleSubmit = values => dispatch(signup(values)).then(() => {
+    setOpen(false)
+  })
+  
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -76,7 +82,7 @@ const MainLayout = ({ children, ...props }) => {
       >
         <div className={classes.paper}>
           <h1>Signup</h1>
-          <SignupForm />
+          <SignupForm onSubmit={handleSubmit} pouet={props.auth.signupError} />
         </div>
       </Modal>
       <AppBar position="fixed" className={classes.appBar}>
@@ -115,6 +121,4 @@ const MainLayout = ({ children, ...props }) => {
 
 const mapStateToProps = state => state.mainReducer
 
-const mapDispatchToProps = {}
-
-export default connect(mapStateToProps, mapDispatchToProps)(MainLayout)
+export default connect(mapStateToProps)(MainLayout)
