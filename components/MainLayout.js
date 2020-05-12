@@ -13,9 +13,15 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import EmojiEmotions from '@material-ui/icons/EmojiEmotions'
+import MuiAlert from '@material-ui/lab/Alert'
+import Snackbar from '@material-ui/core/Snackbar'
 
 import SignupForm from './SignupForm'
-import { signup } from '../ducks/main'
+import { signup, removeMessage } from '../ducks/main'
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const drawerWidth = 240
 
@@ -58,6 +64,7 @@ const useStyles = makeStyles((theme) => ({
 const MainLayout = ({ children, dispatch, ...props }) => {
   const classes = useStyles()
   const [open, setOpen] = React.useState(false)
+  const [openSnackbar, setOpenSnackbar] = React.useState(false)
   const handleOpen = () => {
     setOpen(true)
   }
@@ -69,10 +76,24 @@ const MainLayout = ({ children, dispatch, ...props }) => {
   const handleSubmit = values => dispatch(signup(values)).then(() => {
     setOpen(false)
   })
-  
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false)
+    dispatch(removeMessage())
+  }
+
+  if (!openSnackbar && props.notification.message) setOpenSnackbar(true)
+
   return (
     <div className={classes.root}>
       <CssBaseline />
+      {props.notification.message && 
+        <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+          <Alert onClose={handleCloseSnackbar} severity="success">
+            {props.notification.message}
+          </Alert>
+        </Snackbar>
+      }
       <Modal
         className={classes.modal}
         open={open}
