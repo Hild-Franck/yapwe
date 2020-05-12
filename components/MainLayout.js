@@ -17,7 +17,7 @@ import MuiAlert from '@material-ui/lab/Alert'
 import Snackbar from '@material-ui/core/Snackbar'
 
 import SignupForm from './SignupForm'
-import { signup, removeMessage } from '../ducks/main'
+import { signup, removeMessage, addMessage } from '../ducks/main'
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -74,6 +74,7 @@ const MainLayout = ({ children, dispatch, ...props }) => {
   }
 
   const handleSubmit = values => dispatch(signup(values)).then(() => {
+    dispatch(addMessage('User created, you can now login !'))
     setOpen(false)
   })
 
