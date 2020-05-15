@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import Link from 'next/link'
 import { makeStyles } from '@material-ui/core/styles'
@@ -23,7 +23,7 @@ import MuiAlert from '@material-ui/lab/Alert'
 
 import SignupForm from './SignupForm'
 import LoginForm from './LoginForm'
-import { signup, logout, login, removeMessage, addMessage } from '../ducks/main'
+import { signup, logout, login, removeMessage, addMessage, setUser } from '../ducks/main'
 
 const Alert = props => <MuiAlert elevation={6} variant="filled" {...props} />
 
@@ -92,7 +92,8 @@ const MainLayout = ({ children, dispatch, ...props }) => {
     setOpen('')
   })
 
-  const handleLoginSubmit = values => dispatch(login(values)).then(() => {
+  const handleLoginSubmit = values => dispatch(login(values)).then(result => {
+    localStorage.setItem("user", result.body.data)
     dispatch(addMessage('Logged in !'))
     setOpen('')
   })
@@ -112,7 +113,9 @@ const MainLayout = ({ children, dispatch, ...props }) => {
 
   const handleLogout = () => {
     setAnchorEl(null)
-    dispatch(logout())
+    dispatch(logout()).then(() => {
+      localStorage.removeItem('user')
+    })
   }
 
   const menuId = 'primary-search-account-menu'
@@ -132,6 +135,15 @@ const MainLayout = ({ children, dispatch, ...props }) => {
 
   if (!openSnackbar && props.notification.message) setOpenSnackbar(true)
   
+  useEffect(() => {
+    const user = localStorage.getItem('user')
+    if (!props.auth.user && user) {
+      dispatch(setUser(user))
+    }
+  })
+
+
+
   return (
     <div className={classes.root}>
       <CssBaseline />

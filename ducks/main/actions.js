@@ -1,5 +1,6 @@
 export const PAGE_NOT_FOUND = '@app/PAGE_NOT_FOUND'
 export const WELCOME = '@app/WELCOME'
+export const SET_USER = '@app/SET_USER'
 export const NEW_MESSAGE = '@app/NEW_MESSAGE'
 export const REMOVE_MESSAGE = '@app/REMOVE_MESSAGE'
 

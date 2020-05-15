@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 
 import {
-	PAGE_NOT_FOUND, WELCOME,
+	PAGE_NOT_FOUND, WELCOME, SET_USER,
 	SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAIL,
 	LOGIN, LOGIN_SUCCESS, LOGIN_FAIL,
 	LOGOUT, LOGOUT_SUCCESS, LOGOUT_FAIL,
@@ -51,6 +51,11 @@ const notificationReducer = (state = { message: '' }, action) => {
 
 const authReducer = (state = { user: null }, action) => {
 	switch (action.type) {
+		case SET_USER:
+			return {
+				...state,
+				user: action.payload
+			}
 		case SIGNUP:
       return {
         ...state,

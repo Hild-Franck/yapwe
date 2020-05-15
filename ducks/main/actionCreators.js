@@ -1,5 +1,5 @@
 import {
-	PAGE_NOT_FOUND, WELCOME,
+	PAGE_NOT_FOUND, WELCOME, SET_USER,
 	SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAIL,
 	LOGIN, LOGIN_SUCCESS, LOGIN_FAIL,
 	LOGOUT, LOGOUT_SUCCESS, LOGOUT_FAIL,
@@ -28,6 +28,13 @@ export function removeMessage() {
 	return {
 		type: REMOVE_MESSAGE,
 		payload: ''
+	}
+}
+
+export function setUser(user) {
+	return {
+		type: SET_USER,
+		payload: user
 	}
 }
 
