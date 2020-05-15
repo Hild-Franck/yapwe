@@ -1,6 +1,11 @@
 import { combineReducers } from 'redux'
 
-import { PAGE_NOT_FOUND, WELCOME, SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAIL, NEW_MESSAGE, REMOVE_MESSAGE } from './actions'
+import {
+	PAGE_NOT_FOUND, WELCOME,
+	SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAIL,
+	LOGIN, LOGIN_SUCCESS, LOGIN_FAIL,
+	NEW_MESSAGE, REMOVE_MESSAGE
+} from './actions'
 
 // only used in SSR to know if NotFoundPage is reached
 const appStatus = (state = 200, action) => {
@@ -43,7 +48,7 @@ const notificationReducer = (state = { message: '' }, action) => {
 	}
 }
 
-const authReducer = (state = { user: '' }, action) => {
+const authReducer = (state = { user: null }, action) => {
 	switch (action.type) {
 		case SIGNUP:
       return {
@@ -54,16 +59,33 @@ const authReducer = (state = { user: '' }, action) => {
       return {
         ...state,
         signingUp: false,
-        user: action.result,
 				signupError: null
       }
     case SIGNUP_FAIL:
       return {
         ...state,
         signingUp: false,
-        user: null,
         signupError: action.error
 			}
+			case LOGIN:
+				return {
+					...state,
+					loginUp: true
+				}
+			case LOGIN_SUCCESS:
+				return {
+					...state,
+					loginUp: false,
+					user: action.result,
+					loginError: null
+				}
+			case LOGIN_FAIL:
+				return {
+					...state,
+					loginUp: false,
+					user: null,
+					loginError: action.error
+				}
 		default:
 			return state
 	}

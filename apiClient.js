@@ -5,7 +5,7 @@ import config from './config'
 const methods = ['get', 'post', 'delete']
 
 const apiMethod = method => (path, data) =>
-  superagent[method](`${config.apiUrl}${path}`, data)
+  superagent[method](`${config.apiUrl}${path}`, data).withCredentials()
 
 const apiClient = {}
 

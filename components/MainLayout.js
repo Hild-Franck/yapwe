@@ -13,12 +13,15 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import EmojiEmotions from '@material-ui/icons/EmojiEmotions'
-import MuiAlert from '@material-ui/lab/Alert'
 import Snackbar from '@material-ui/core/Snackbar'
+import IconButton from '@material-ui/core/IconButton'
+import EmojiEmotions from '@material-ui/icons/EmojiEmotions'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import MuiAlert from '@material-ui/lab/Alert'
 
 import SignupForm from './SignupForm'
-import { signup, removeMessage, addMessage } from '../ducks/main'
+import LoginForm from './LoginForm'
+import { signup, login, removeMessage, addMessage } from '../ducks/main'
 
 const Alert = props => <MuiAlert elevation={6} variant="filled" {...props} />
 
@@ -70,19 +73,24 @@ const useStyles = makeStyles((theme) => ({
 
 const MainLayout = ({ children, dispatch, ...props }) => {
   const classes = useStyles()
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = React.useState('')
   const [openSnackbar, setOpenSnackbar] = React.useState(false)
-  const handleOpen = () => {
-    setOpen(true)
+  const handleOpen = name => () => {
+    setOpen(name)
   }
 
   const handleClose = () => {
-    setOpen(false)
+    setOpen('')
   }
 
-  const handleSubmit = values => dispatch(signup(values)).then(() => {
+  const handleSignupSubmit = values => dispatch(signup(values)).then(() => {
     dispatch(addMessage('User created, you can now login !'))
-    setOpen(false)
+    setOpen('')
+  })
+
+  const handleLoginSubmit = values => dispatch(login(values)).then(() => {
+    dispatch(addMessage('Logged in !'))
+    setOpen('')
   })
 
   const handleCloseSnackbar = () => {
@@ -91,7 +99,7 @@ const MainLayout = ({ children, dispatch, ...props }) => {
   }
 
   if (!openSnackbar && props.notification.message) setOpenSnackbar(true)
-
+  
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -104,14 +112,19 @@ const MainLayout = ({ children, dispatch, ...props }) => {
       }
       <Modal
         className={classes.modal}
-        open={open}
+        open={Boolean(open)}
         onClose={handleClose}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
         <div className={classes.paper}>
-          <h1>Signup</h1>
-          <SignupForm onSubmit={handleSubmit} signupError={props.auth.signupError} />
+          {open == 'signup' && (<div>
+            <h1>Signup</h1>
+            <SignupForm onSubmit={handleSignupSubmit} signupError={props.auth.signupError} />
+          </div>) || (<div>
+            <h1>Login</h1>
+            <LoginForm onSubmit={handleLoginSubmit} loginError={props.auth.loginError} />
+          </div>)}
         </div>
       </Modal>
       <AppBar position="fixed" className={classes.appBar}>
@@ -119,8 +132,14 @@ const MainLayout = ({ children, dispatch, ...props }) => {
           <Typography variant="h6" className={classes.title} noWrap>
             YapWe
           </Typography>
-          <Button color="inherit" onClick={handleOpen}>Signup</Button>
-          <Button color="inherit">Login</Button>
+          {!props.auth.user && (<div>
+            <Button color="inherit" onClick={handleOpen('signup')}>Signup</Button>
+            <Button color="inherit" onClick={handleOpen('login')}>Login</Button>
+          </div>) || (
+            <IconButton>
+              <AccountCircle />
+            </IconButton>
+          )}
         </Toolbar>
       </AppBar>
       <Drawer
