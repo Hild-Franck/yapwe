@@ -29,12 +29,14 @@ const notificationReducer = (state = { message: '' }, action) => {
 		case NEW_MESSAGE:
 			return {
 				...state,
-				message: action.payload
+				message: action.payload.message,
+				severity: action.payload.severity || 'success'
 			}
 		case REMOVE_MESSAGE:
 			return {
 				...state,
-				message: ''
+				message: '',
+				severity: 'success'
 			}
 		default:
 			return state

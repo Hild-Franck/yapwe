@@ -11,10 +11,10 @@ export function sayWelcome(message) {
 	}
 }
 
-export function addMessage(message) {
+export function addMessage(message, severity) {
 	return {
 		type: NEW_MESSAGE,
-		payload: message
+		payload: { message, severity }
 	}
 }
 

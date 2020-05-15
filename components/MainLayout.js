@@ -97,7 +97,7 @@ const MainLayout = ({ children, dispatch, ...props }) => {
       <CssBaseline />
       {props.notification.message && 
         <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-          <Alert onClose={handleCloseSnackbar} severity="success">
+          <Alert onClose={handleCloseSnackbar} severity={props.notification.severity}>
             {props.notification.message}
           </Alert>
         </Snackbar>
