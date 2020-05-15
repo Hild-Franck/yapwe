@@ -4,6 +4,7 @@ import {
 	PAGE_NOT_FOUND, WELCOME,
 	SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAIL,
 	LOGIN, LOGIN_SUCCESS, LOGIN_FAIL,
+	LOGOUT, LOGOUT_SUCCESS, LOGOUT_FAIL,
 	NEW_MESSAGE, REMOVE_MESSAGE
 } from './actions'
 
@@ -86,6 +87,25 @@ const authReducer = (state = { user: null }, action) => {
 					user: null,
 					loginError: action.error
 				}
+				case LOGOUT:
+					return {
+						...state,
+						loggingOut: true
+					}
+				case LOGOUT_SUCCESS:
+					return {
+						...state,
+						loggingOut: false,
+						user: null,
+						LOGOUTError: null
+					}
+				case LOGOUT_FAIL:
+					return {
+						...state,
+						loggingOut: false,
+						user: null,
+						LOGOUTError: action.error
+					}
 		default:
 			return state
 	}

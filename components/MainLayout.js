@@ -15,13 +15,15 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Snackbar from '@material-ui/core/Snackbar'
 import IconButton from '@material-ui/core/IconButton'
+import MenuItem from '@material-ui/core/MenuItem'
+import Menu from '@material-ui/core/Menu'
 import EmojiEmotions from '@material-ui/icons/EmojiEmotions'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import MuiAlert from '@material-ui/lab/Alert'
 
 import SignupForm from './SignupForm'
 import LoginForm from './LoginForm'
-import { signup, login, removeMessage, addMessage } from '../ducks/main'
+import { signup, logout, login, removeMessage, addMessage } from '../ducks/main'
 
 const Alert = props => <MuiAlert elevation={6} variant="filled" {...props} />
 
@@ -75,6 +77,8 @@ const MainLayout = ({ children, dispatch, ...props }) => {
   const classes = useStyles()
   const [open, setOpen] = React.useState('')
   const [openSnackbar, setOpenSnackbar] = React.useState(false)
+  const [anchorEl, setAnchorEl] = React.useState(null)
+  const isMenuOpen = Boolean(anchorEl)
   const handleOpen = name => () => {
     setOpen(name)
   }
@@ -97,6 +101,34 @@ const MainLayout = ({ children, dispatch, ...props }) => {
     setOpenSnackbar(false)
     dispatch(removeMessage())
   }
+
+  const handleProfileMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleMenuClose = () => {
+    setAnchorEl(null)
+  }
+
+  const handleLogout = () => {
+    setAnchorEl(null)
+    dispatch(logout())
+  }
+
+  const menuId = 'primary-search-account-menu'
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={handleLogout}>Logout</MenuItem>
+    </Menu>
+  )
 
   if (!openSnackbar && props.notification.message) setOpenSnackbar(true)
   
@@ -136,12 +168,13 @@ const MainLayout = ({ children, dispatch, ...props }) => {
             <Button color="inherit" onClick={handleOpen('signup')}>Signup</Button>
             <Button color="inherit" onClick={handleOpen('login')}>Login</Button>
           </div>) || (
-            <IconButton>
+            <IconButton aria-controls={menuId} aria-haspopup="true" onClick={handleProfileMenuOpen}>
               <AccountCircle />
             </IconButton>
           )}
         </Toolbar>
       </AppBar>
+      {renderMenu}
       <Drawer
         className={classes.drawer}
         variant="permanent"

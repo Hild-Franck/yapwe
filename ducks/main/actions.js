@@ -10,3 +10,7 @@ export const SIGNUP_FAIL = '@app/SIGNUP_FAIL'
 export const LOGIN = '@app/LOGIN'
 export const LOGIN_SUCCESS = '@app/LOGIN_SUCCESS'
 export const LOGIN_FAIL = '@app/LOGIN_FAIL'
+
+export const LOGOUT = '@app/LOGOUT'
+export const LOGOUT_SUCCESS = '@app/LOGOUT_SUCCESS'
+export const LOGOUT_FAIL = '@app/LOGOUT_FAIL'

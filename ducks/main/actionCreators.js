@@ -2,6 +2,7 @@ import {
 	PAGE_NOT_FOUND, WELCOME,
 	SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAIL,
 	LOGIN, LOGIN_SUCCESS, LOGIN_FAIL,
+	LOGOUT, LOGOUT_SUCCESS, LOGOUT_FAIL,
 	NEW_MESSAGE, REMOVE_MESSAGE
 } from './actions'
 
@@ -41,5 +42,12 @@ export function login(data) {
   return {
     types: [LOGIN, LOGIN_SUCCESS, LOGIN_FAIL],
     promise: client => client.post('/auth/login', { ...data })
+  }
+}
+
+export function logout() {
+  return {
+    types: [LOGOUT, LOGOUT_SUCCESS, LOGOUT_FAIL],
+    promise: client => client.post('/auth/logout')
   }
 }
