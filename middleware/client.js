@@ -1,4 +1,4 @@
-import superagent from 'superagent'
+import apiClient from '../apiClient'
 
 export default function clientMiddleware() {
   return ({dispatch, getState}) => {
@@ -15,10 +15,10 @@ export default function clientMiddleware() {
       const [REQUEST, SUCCESS, FAILURE] = types
       next({...rest, type: REQUEST})
 
-      const actionPromise = promise(superagent)
+      const actionPromise = promise(apiClient)
       actionPromise.then(
-        (result) => next({...rest, result, type: SUCCESS}),
-        (error) => next({...rest, error, type: FAILURE})
+        (result) => next({...rest, result: result.reponse.body, type: SUCCESS}),
+        (error) => next({...rest, error: error.response.body, type: FAILURE})
       ).catch((error)=> {
         console.error('MIDDLEWARE ERROR:', error)
         next({...rest, error, type: FAILURE})

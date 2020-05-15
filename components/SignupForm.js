@@ -15,16 +15,14 @@ const renderTextField = (
   />
 )
 
-const SignupForm = ({ handleSubmit, children, className = '', pouet }) => {
-  console.log("error", pouet);
-  
+const SignupForm = ({ handleSubmit, children, className = '', signupError }) => {
   return (
     <Form  noValidate autoComplete="off" onSubmit={handleSubmit}>
       <Field fullWidth label="Username" name="username" component={renderTextField} type="text" />
       <Field fullWidth label="Password" name="password" component={renderTextField} type="password" />
       <Field fullWidth label="Email" name="email" component={renderTextField} type="email" />
       <Button type="submit">Send</Button>
-      {pouet && <Alert severity="error">{pouet.response.body.message}</Alert>}
+      {signupError && <Alert severity="error">{signupError.message}</Alert>}
       {children}
     </Form>
   )

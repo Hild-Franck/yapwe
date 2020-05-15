@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import Link from 'next/link'
 import { makeStyles } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Button from '@material-ui/core/Button'
@@ -19,9 +20,15 @@ import Snackbar from '@material-ui/core/Snackbar'
 import SignupForm from './SignupForm'
 import { signup, removeMessage, addMessage } from '../ducks/main'
 
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+const Alert = props => <MuiAlert elevation={6} variant="filled" {...props} />
+
+const ButtonLink = ({ className, href, hrefAs, to, children }) => (
+  <Link href={href} as={hrefAs} to={to} prefetch>
+    <a className={className}>
+      {children}
+    </a>
+  </Link>
+)
 
 const drawerWidth = 240
 
@@ -104,7 +111,7 @@ const MainLayout = ({ children, dispatch, ...props }) => {
       >
         <div className={classes.paper}>
           <h1>Signup</h1>
-          <SignupForm onSubmit={handleSubmit} pouet={props.auth.signupError} />
+          <SignupForm onSubmit={handleSubmit} signupError={props.auth.signupError} />
         </div>
       </Modal>
       <AppBar position="fixed" className={classes.appBar}>
@@ -126,7 +133,7 @@ const MainLayout = ({ children, dispatch, ...props }) => {
         <Toolbar />
         <div className={classes.drawerContainer}>
           <List>
-            <ListItem button key="Mood">
+            <ListItem button key="Mood" component={ButtonLink} href="/mood">
               <ListItemIcon><EmojiEmotions /></ListItemIcon>
               <ListItemText primary="Mood" />
             </ListItem>

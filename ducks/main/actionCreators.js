@@ -28,6 +28,6 @@ export function removeMessage() {
 export function signup(data) {
   return {
     types: [SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAIL],
-    promise: client => client.post('http://localhost:9000/auth/signup', { ...data })
+    promise: client => client.post('/auth/signup', { ...data })
   }
 }
