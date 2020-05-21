@@ -179,11 +179,12 @@ const MainLayout = ({ children, dispatch, ...props }) => {
           {!props.auth.user && (<div>
             <Button color="inherit" onClick={handleOpen('signup')}>Signup</Button>
             <Button color="inherit" onClick={handleOpen('login')}>Login</Button>
-          </div>) || (
+          </div>) || (<div>
             <IconButton aria-controls={menuId} aria-haspopup="true" onClick={handleProfileMenuOpen}>
               <AccountCircle />
             </IconButton>
-          )}
+            <span>{props.auth.user.username}</span>
+            </div>)}
         </Toolbar>
       </AppBar>
       {renderMenu}
