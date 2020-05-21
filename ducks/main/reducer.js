@@ -82,7 +82,7 @@ const authReducer = (state = { user: null }, action) => {
 				return {
 					...state,
 					loginUp: false,
-					user: action.result,
+					user: action.result.data,
 					loginError: null
 				}
 			case LOGIN_FAIL:
@@ -98,18 +98,19 @@ const authReducer = (state = { user: null }, action) => {
 						loggingOut: true
 					}
 				case LOGOUT_SUCCESS:
+					localStorage.removeItem('user')
 					return {
 						...state,
 						loggingOut: false,
 						user: null,
-						LOGOUTError: null
+						logoutError: null
 					}
 				case LOGOUT_FAIL:
 					return {
 						...state,
 						loggingOut: false,
 						user: null,
-						LOGOUTError: action.error
+						logoutError: action.error
 					}
 		default:
 			return state

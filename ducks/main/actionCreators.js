@@ -55,6 +55,6 @@ export function login(data) {
 export function logout() {
   return {
     types: [LOGOUT, LOGOUT_SUCCESS, LOGOUT_FAIL],
-    promise: client => client.post('/auth/logout')
+    promise: client => client.get('/auth/logout')
   }
 }
