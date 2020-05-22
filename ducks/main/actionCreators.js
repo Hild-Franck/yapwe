@@ -1,5 +1,6 @@
 import {
 	PAGE_NOT_FOUND, WELCOME, SET_USER,
+	NEXT_MONTH, PREVIOUS_MONTH, NEXT_YEAR, PREVIOUS_YEAR,
 	SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAIL,
 	LOGIN, LOGIN_SUCCESS, LOGIN_FAIL,
 	LOGOUT, LOGOUT_SUCCESS, LOGOUT_FAIL,
@@ -14,6 +15,30 @@ export function sayWelcome(message) {
 	return {
 		type: WELCOME,
 		payload: message
+	}
+}
+
+export function nextMonth() {
+	return {
+		type: NEXT_MONTH
+	}
+}
+
+export function previousMonth() {
+	return {
+		type: PREVIOUS_MONTH
+	}
+}
+
+export function nextYear() {
+	return {
+		type: NEXT_YEAR
+	}
+}
+
+export function previousYear() {
+	return {
+		type: PREVIOUS_YEAR
 	}
 }
 

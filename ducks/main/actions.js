@@ -4,6 +4,11 @@ export const SET_USER = '@app/SET_USER'
 export const NEW_MESSAGE = '@app/NEW_MESSAGE'
 export const REMOVE_MESSAGE = '@app/REMOVE_MESSAGE'
 
+export const NEXT_MONTH = '@app/NEXT_MONTH'
+export const PREVIOUS_MONTH = '@app/PREVIOUS_MONTH'
+export const NEXT_YEAR = '@app/NEXT_YEAR'
+export const PREVIOUS_YEAR = '@app/PREVIOUS_YEAR'
+
 export const SIGNUP = '@app/SIGNUP'
 export const SIGNUP_SUCCESS = '@app/SIGNUP_SUCCESS'
 export const SIGNUP_FAIL = '@app/SIGNUP_FAIL'

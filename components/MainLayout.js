@@ -19,11 +19,13 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
 import EmojiEmotions from '@material-ui/icons/EmojiEmotions'
 import AccountCircle from '@material-ui/icons/AccountCircle'
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import MuiAlert from '@material-ui/lab/Alert'
 
 import SignupForm from './SignupForm'
 import LoginForm from './LoginForm'
-import { signup, logout, login, removeMessage, addMessage, setUser } from '../ducks/main'
+import { signup, logout, login, removeMessage, addMessage, setUser, previousMonth, nextMonth, previousYear, nextYear } from '../ducks/main'
 
 const Alert = props => <MuiAlert elevation={6} variant="filled" {...props} />
 
@@ -46,6 +48,14 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+  },
+  user: {
+    flexGrow: 1,
+    textAlign: 'right'
+  },
+  date: {
+    flexGrow: 2,
+    textAlign: 'center'
   },
   modal: {
     display: 'flex',
@@ -142,7 +152,11 @@ const MainLayout = ({ children, dispatch, ...props }) => {
     }
   })
 
+  const handlePreviousMonth = () => dispatch(previousMonth())
+  const handleNextMonth = () => dispatch(nextMonth())
 
+  const handlePreviousYear = () => dispatch(previousYear())
+  const handleNextYear = () => dispatch(nextYear())
 
   return (
     <div className={classes.root}>
@@ -176,10 +190,22 @@ const MainLayout = ({ children, dispatch, ...props }) => {
           <Typography variant="h6" className={classes.title} noWrap>
             YapWe
           </Typography>
-          {!props.auth.user && (<div>
+          <div className={classes.date}>
+            <p>
+              <IconButton onClick={handlePreviousMonth}><ArrowBackIosIcon /></IconButton>
+              {props.date.toLocaleString('default', { month: 'long' }).toUpperCase()}
+              <IconButton onClick={handleNextMonth}><ArrowForwardIosIcon /></IconButton>
+            </p>
+            <p>
+              <IconButton onClick={handlePreviousYear}><ArrowBackIosIcon /></IconButton>
+              {props.date.toLocaleString('default', { year: 'numeric' })}
+              <IconButton onClick={handleNextYear}><ArrowForwardIosIcon /></IconButton>
+            </p>
+          </div>
+          {!props.auth.user && (<div  className={classes.user}>
             <Button color="inherit" onClick={handleOpen('signup')}>Signup</Button>
             <Button color="inherit" onClick={handleOpen('login')}>Login</Button>
-          </div>) || (<div>
+          </div>) || (<div  className={classes.user}>
             <IconButton aria-controls={menuId} aria-haspopup="true" onClick={handleProfileMenuOpen}>
               <AccountCircle />
             </IconButton>
@@ -195,6 +221,7 @@ const MainLayout = ({ children, dispatch, ...props }) => {
           paper: classes.drawerPaper,
         }}
       >
+        <Toolbar />
         <Toolbar />
         <div className={classes.drawerContainer}>
           <List>

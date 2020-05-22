@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 
 import {
 	PAGE_NOT_FOUND, WELCOME, SET_USER,
+	NEXT_MONTH, PREVIOUS_MONTH, NEXT_YEAR, PREVIOUS_YEAR,
 	SIGNUP, SIGNUP_SUCCESS, SIGNUP_FAIL,
 	LOGIN, LOGIN_SUCCESS, LOGIN_FAIL,
 	LOGOUT, LOGOUT_SUCCESS, LOGOUT_FAIL,
@@ -44,6 +45,45 @@ const notificationReducer = (state = { message: '' }, action) => {
 				message: '',
 				severity: 'success'
 			}
+		default:
+			return state
+	}
+}
+
+const dateReducer = (state = (new Date()), action) => {
+	switch (action.type) {
+		case PREVIOUS_MONTH: {
+			const date = new Date(state)
+			const month = date.getMonth()
+			if (month == 0) {
+				date.setMonth(11)
+				date.setFullYear(date.getFullYear()-1)
+				return date
+			}
+			date.setMonth(date.getMonth()-1)
+			return date
+		}
+		case NEXT_MONTH: {
+			const date = new Date(state)
+			const month = date.getMonth()
+			if (month == 11) {
+				date.setMonth(0)
+				date.setFullYear(date.getFullYear()+1)
+				return date
+			}
+			date.setMonth(date.getMonth()+1)
+			return date
+		}
+		case PREVIOUS_YEAR: {
+			const date = new Date(state)
+			date.setFullYear(date.getFullYear()-1)
+			return date
+		}
+		case NEXT_YEAR: {
+			const date = new Date(state)
+			date.setFullYear(date.getFullYear()+1)
+			return date
+		}
 		default:
 			return state
 	}
@@ -120,6 +160,7 @@ const authReducer = (state = { user: null }, action) => {
 export const reducer = combineReducers({
 	status: appStatus,
 	welcome: welcomeReducer,
+	date: dateReducer,
 	auth: authReducer,
 	notification: notificationReducer
 })
