@@ -2,6 +2,7 @@ import App from 'next/app';
 import {Provider} from 'react-redux';
 import React from 'react';
 import withRedux from "next-redux-wrapper";
+import Toolbar from '@material-ui/core/Toolbar'
 
 import MainLayout from '../components/MainLayout'
 import { initializeStore } from '../store';
@@ -22,6 +23,7 @@ class MyApp extends App {
         return (
             <Provider store={store}>
                 <MainLayout {...pageProps}>
+                    <Toolbar />
                     <Component {...pageProps}/>
                 </MainLayout>
             </Provider>
