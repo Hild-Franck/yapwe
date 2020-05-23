@@ -22,7 +22,7 @@ export const reducer = (state=initialState, action) => {
 				...state,
 				data: reduce(action.result.data, (acc, mood) => {
 					const day = new Date(mood.day)
-					acc[day.getDate()] = { ...mood, day }
+					acc[day.getUTCDate()] = { ...mood, day }
 					return acc
 				}, {})
 			}
@@ -39,7 +39,7 @@ export const reducer = (state=initialState, action) => {
 		case CREATE_MOOD_SUCCESS:
 			const day = new Date(action.result.data.day)
 			const newData = clone(state.data)
-			newData[day.getDate()] = { ...action.result.data, day }
+			newData[day.getUTCDate()] = { ...action.result.data, day }
 			
 			return {
 				...state,

@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import Modal from '@material-ui/core/Modal'
 
-import { getMood, createMood } from '../ducks/mood'
+import { getMood, createMood, updateMood } from '../ducks/mood'
 import { addMessage } from '../ducks/main'
 
 const dayInitial = ['M','T','W','T','F','S','S']
@@ -77,7 +77,7 @@ const Mood = props => {
     && weeks.push(Array(7).fill(true))
     || weeks.push(Array(weekEnd).fill(true).concat(Array(7-weekEnd).fill()))
   
-  const moods = pickBy(props.mood.data, mood => mood.day.getMonth() == month && mood.day.getFullYear() == year)
+  const moods = pickBy(props.mood.data, mood => mood.day.getUTCMonth() == month && mood.day.getUTCFullYear() == year)
   
   const handleOpen = (month, day, year) => () => {
     setModal({month, day, year})
@@ -100,7 +100,11 @@ const Mood = props => {
             Select {modal && new Date(modal.year, modal.month, modal.day).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} mood:
           </h1>
           <Grid container spacing={3} justify="center" alignItems="center">
-            {moodScores.map(s => <Grid item onClick={() => props.dispatch(createMood(modal.day, modal.month, modal.year, s)).then(setModal(null))}>
+            {moodScores.map(s => <Grid item onClick={() => props.dispatch(
+              moods[modal.day]
+                && updateMood(modal.day, modal.month, modal.year, s)
+                || createMood(modal.day, modal.month, modal.year, s)
+            ).then(setModal(null))}>
               <Paper className={`${classes.paper} ${classes[s]}`}></Paper>
             </Grid>)}
           </Grid>
