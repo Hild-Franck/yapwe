@@ -1,6 +1,9 @@
-import { reduce } from 'lodash'
+import { reduce, clone } from 'lodash'
 
-import { GET_MOOD, GET_MOOD_SUCCESS, GET_MOOD_FAIL } from './actions'
+import {
+	GET_MOOD, GET_MOOD_SUCCESS, GET_MOOD_FAIL,
+	CREATE_MOOD, CREATE_MOOD_SUCCESS, CREATE_MOOD_FAIL
+} from './actions'
 
 const initialState = {
 	data: {},
@@ -27,6 +30,25 @@ export const reducer = (state=initialState, action) => {
 			return {
 				...state,
 				loading: false
+			}
+		case CREATE_MOOD:
+			return {
+				...state,
+				loading: true
+			}
+		case CREATE_MOOD_SUCCESS:
+			const day = new Date(action.result.data.day)
+			const newData = clone(state.data)
+			newData[day.getDate()] = { ...action.result.data, day }
+			
+			return {
+				...state,
+				data: newData
+			}
+		case CREATE_MOOD_FAIL:
+			return {
+				...state,
+				error: action.error
 			}
 		default:
 			return state
