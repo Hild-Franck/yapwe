@@ -1,173 +1,85 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import Link from 'next/link'
-import { makeStyles } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import Button from '@material-ui/core/Button'
 import Modal from '@material-ui/core/Modal'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
 import Drawer from '@material-ui/core/Drawer'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Snackbar from '@material-ui/core/Snackbar'
-import IconButton from '@material-ui/core/IconButton'
-import MenuItem from '@material-ui/core/MenuItem'
-import Menu from '@material-ui/core/Menu'
 import EmojiEmotions from '@material-ui/icons/EmojiEmotions'
-import AccountCircle from '@material-ui/icons/AccountCircle'
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import MuiAlert from '@material-ui/lab/Alert'
 
 import SignupForm from './SignupForm'
 import LoginForm from './LoginForm'
-import { signup, logout, login, removeMessage, addMessage, setUser, previousMonth, nextMonth, previousYear, nextYear } from '../ducks/main'
+import UserMenu from './UserMenu'
+import MainToolbar from './MainToolbar'
+import { signup, logout, login, removeMessage, addMessage, setUser } from '../ducks/main'
+import useStyles from './style/mainLayout'
 
 const Alert = props => <MuiAlert elevation={6} variant="filled" {...props} />
 
-const ButtonLink = ({ className, href, hrefAs, to, children }) => (
-  <Link href={href} as={hrefAs} to={to} prefetch>
-    <a className={className}>
-      {children}
-    </a>
+const ButtonLink = ({ className, href, hrefAs, children }) => (
+  <Link href={href} as={hrefAs} prefetch>
+    <a className={className}>{children}</a>
   </Link>
 )
 
-const drawerWidth = 240
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-  },
-  title: {
-    flexGrow: 1,
-  },
-  user: {
-    flexGrow: 1,
-    textAlign: 'right'
-  },
-  date: {
-    flexGrow: 2,
-    textAlign: 'center'
-  },
-  modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3)
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  drawerContainer: {
-    overflow: 'auto',
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-}))
-
 const MainLayout = ({ children, dispatch, ...props }) => {
   const classes = useStyles()
+
   const [open, setOpen] = React.useState('')
   const [openSnackbar, setOpenSnackbar] = React.useState(false)
   const [anchorEl, setAnchorEl] = React.useState(null)
-  const isMenuOpen = Boolean(anchorEl)
-  const handleOpen = name => () => {
-    setOpen(name)
-  }
 
-  const handleClose = () => {
-    setOpen('')
-  }
+  const handleOpen = name => () => setOpen(name)
+  const handleClose = () => setOpen('')
 
-  const handleSignupSubmit = values => dispatch(signup(values)).then(() => {
+  const onSignupSubmit = values => dispatch(signup(values)).then(() => {
     dispatch(addMessage('User created, you can now login !'))
     setOpen('')
   })
 
-  const handleLoginSubmit = values => dispatch(login(values)).then(result => {
+  const onLoginSubmit = values => dispatch(login(values)).then(result => {
     localStorage.setItem("user", result.body.data)
     dispatch(addMessage('Logged in !'))
     setOpen('')
   })
 
-  const handleCloseSnackbar = () => {
+  const onSnackbarClose = () => {
     setOpenSnackbar(false)
     dispatch(removeMessage())
   }
 
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleMenuClose = () => {
-    setAnchorEl(null)
-  }
+  const handleMenuOpen = ({ currentTarget }) => setAnchorEl(currentTarget)
+  const handleMenuClose = () => setAnchorEl(null)
 
   const handleLogout = () => {
     setAnchorEl(null)
-    dispatch(logout()).then(() => {
-      localStorage.removeItem('user')
-    })
+    dispatch(logout()).then(() => localStorage.removeItem('user'))
   }
 
   const menuId = 'primary-search-account-menu'
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleLogout}>Logout</MenuItem>
-    </Menu>
-  )
 
   if (!openSnackbar && props.notification.message) setOpenSnackbar(true)
   
   useEffect(() => {
     const user = localStorage.getItem('user')
-    if (!props.auth.user && user) {
-      dispatch(setUser(user))
-    }
+    if (!props.auth.user && user) dispatch(setUser(user))
   })
-
-  const handlePreviousMonth = () => dispatch(previousMonth())
-  const handleNextMonth = () => dispatch(nextMonth())
-
-  const handlePreviousYear = () => dispatch(previousYear())
-  const handleNextYear = () => dispatch(nextYear())
 
   return (
     <div className={classes.root}>
       <CssBaseline />
-      {props.notification.message && 
-        <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-          <Alert onClose={handleCloseSnackbar} severity={props.notification.severity}>
-            {props.notification.message}
-          </Alert>
+      {(({ message, severity }) => message &&
+        <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={onSnackbarClose}>
+          <Alert onClose={onSnackbarClose} severity={severity}>{message}</Alert>
         </Snackbar>
-      }
+      )(props.notification)}
       <Modal
         className={classes.modal}
         open={Boolean(open)}
@@ -176,49 +88,33 @@ const MainLayout = ({ children, dispatch, ...props }) => {
         aria-describedby="simple-modal-description"
       >
         <div className={classes.paper}>
-          {open == 'signup' && (<div>
+          {(({ signupError, loginError }) => open == 'signup' ? <div>
             <h1>Signup</h1>
-            <SignupForm onSubmit={handleSignupSubmit} signupError={props.auth.signupError} />
-          </div>) || (<div>
+            <SignupForm onSubmit={onSignupSubmit} err={signupError} />
+          </div> : <div>
             <h1>Login</h1>
-            <LoginForm onSubmit={handleLoginSubmit} loginError={props.auth.loginError} />
-          </div>)}
+            <LoginForm onSubmit={onLoginSubmit} err={loginError} />
+          </div>)(props.auth)}
         </div>
       </Modal>
       <AppBar position="fixed" className={classes.appBar}>
-      <Toolbar>
-          <Typography variant="h6" className={classes.title} noWrap>
-            YapWe
-          </Typography>
-          <div className={classes.date}>
-            <p>
-              <IconButton onClick={handlePreviousMonth}><ArrowBackIosIcon /></IconButton>
-              {props.date.toLocaleString('default', { month: 'long' }).toUpperCase()}
-              <IconButton onClick={handleNextMonth}><ArrowForwardIosIcon /></IconButton>
-            </p>
-            <p>
-              <IconButton onClick={handlePreviousYear}><ArrowBackIosIcon /></IconButton>
-              {props.date.toLocaleString('default', { year: 'numeric' })}
-              <IconButton onClick={handleNextYear}><ArrowForwardIosIcon /></IconButton>
-            </p>
-          </div>
-          {!props.auth.user && (<div  className={classes.user}>
-            <Button color="inherit" onClick={handleOpen('signup')}>Signup</Button>
-            <Button color="inherit" onClick={handleOpen('login')}>Login</Button>
-          </div>) || (<div  className={classes.user}>
-            <IconButton aria-controls={menuId} aria-haspopup="true" onClick={handleProfileMenuOpen}>
-              <AccountCircle />
-            </IconButton>
-            <span>{props.auth.user.username}</span>
-            </div>)}
-        </Toolbar>
+        <MainToolbar
+          handleOpen={handleOpen}
+          menuId={menuId}
+          handleMenuOpen={handleMenuOpen}
+        />
       </AppBar>
-      {renderMenu}
+      <UserMenu
+        anchorEl={anchorEl}
+        menuId={menuId}
+        isMenuOpen={Boolean(anchorEl)}
+        handleMenuClose={handleMenuClose}
+        handleLogout={handleLogout}
+      />
       <Drawer
-        className={classes.drawer}
         variant="permanent"
         classes={{
-          paper: classes.drawerPaper,
+          paper: classes.drawerPaper, drawer: classes.drawer
         }}
       >
         <Toolbar />

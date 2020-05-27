@@ -6,27 +6,17 @@ import { Field, Form, reduxForm, propTypes } from 'redux-form'
 
 const Alert = props => <MuiAlert elevation={6} variant="filled" {...props} />
 
-const renderTextField = (
-  { input, ...rest },
-) => (
-  <TextField
-    {...input}
-    {...rest}
-  />
-)
+const InputField = ({ input, ...rest }) => <TextField {...input} {...rest} />
 
-const SignupForm = ({ handleSubmit, children, className = '', signupError }) => {
-  return (
-    <Form  noValidate autoComplete="off" onSubmit={handleSubmit}>
-      <Field fullWidth label="Username" name="username" component={renderTextField} type="text" />
-      <Field fullWidth label="Password" name="password" component={renderTextField} type="password" />
-      <Field fullWidth label="Email" name="email" component={renderTextField} type="email" />
-      <Button type="submit">Send</Button>
-      {signupError && <Alert severity="error">{signupError.message}</Alert>}
-      {children}
-    </Form>
-  )
-}
+const SignupForm = ({ handleSubmit, children, className = '', err }) =>
+  <Form  noValidate autoComplete="off" onSubmit={handleSubmit}>
+    <Field fullWidth label="Username" name="username" component={InputField} type="text" />
+    <Field fullWidth label="Password" name="password" component={InputField} type="password" />
+    <Field fullWidth label="Email" name="email" component={InputField} type="email" />
+    <Button type="submit">Send</Button>
+    {err && <Alert severity="error">{err.message}</Alert>}
+    {children}
+  </Form>
 
 SignupForm.propTypes = { ...propTypes }
 
