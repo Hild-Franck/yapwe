@@ -18,7 +18,7 @@ import SignupForm from './SignupForm'
 import LoginForm from './LoginForm'
 import UserMenu from './UserMenu'
 import MainToolbar from './MainToolbar'
-import { signup, logout, login, removeMessage, addMessage, setUser } from '../ducks/main'
+import { signup, logout, login, removeMessage, setUser } from '../ducks/main'
 import useStyles from './style/mainLayout'
 
 const Alert = props => <MuiAlert elevation={6} variant="filled" {...props} />
@@ -40,13 +40,11 @@ const MainLayout = ({ children, dispatch, ...props }) => {
   const handleClose = () => setOpen('')
 
   const onSignupSubmit = values => dispatch(signup(values)).then(() => {
-    dispatch(addMessage('User created, you can now login !'))
     setOpen('')
   })
 
   const onLoginSubmit = values => dispatch(login(values)).then(result => {
     localStorage.setItem("user", result.body.data)
-    dispatch(addMessage('Logged in !'))
     setOpen('')
   })
 

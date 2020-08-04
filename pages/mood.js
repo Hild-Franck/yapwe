@@ -7,7 +7,6 @@ import Paper from '@material-ui/core/Paper'
 import Modal from '@material-ui/core/Modal'
 
 import { getMood, createMood, updateMood } from '../ducks/mood'
-import { addMessage } from '../ducks/main'
 
 const dayInitial = ['M','T','W','T','F','S','S']
 const moodScores = [...Array(5).keys()]
@@ -61,10 +60,7 @@ const Mood = props => {
   const year = date.getFullYear()
   
   useEffect(() => {
-    props.dispatch(getMood(month, year)).catch(e => {
-      props.dispatch(addMessage(e.message, 'error'))
-    })
-
+    props.dispatch(getMood(month, year))
   }, [month, year])
 
   const startingDay = new Date(year, month, 0).getDay()
