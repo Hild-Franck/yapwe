@@ -1,40 +1,42 @@
-import App from 'next/app'
 import {Provider} from 'react-redux'
-import React from 'react'
-import withRedux from "next-redux-wrapper"
+import React , { useEffect } from 'react'
 import Toolbar from '@material-ui/core/Toolbar'
 
 import MainLayout from '../components/MainLayout'
 import Modal from '../components/Modal'
-import { initializeStore } from '../store'
+import { wrapper, makeStore } from '../store'
 
-class MyApp extends App {
+const myStore = makeStore()
 
-    static async getInitialProps({Component, ctx}) {
-        const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {}
+const MyApp = props => {
+    //pageProps that were returned  from 'getInitialProps' are stored in the props i.e. pageprops
+    const {Component, pageProps, store} = props
 
-        //Anything returned here can be accessed by the client
-        return {pageProps: pageProps}
-    }
+    useEffect(() => {
+      // Remove the server-side injected CSS.
+      const jssStyles = document.querySelector('#jss-server-side')
+      if (jssStyles) {
+          jssStyles.parentElement.removeChild(jssStyles)
+      }
+    }, [])
 
-    render() {
-        //pageProps that were returned  from 'getInitialProps' are stored in the props i.e. pageprops
-        const {Component, pageProps, store} = this.props
-
-        return (
-            <Provider store={store}>
-                <Modal />
-                <MainLayout {...pageProps}>
-                    <Toolbar />
-                    <Component {...pageProps}/>
-                </MainLayout>
-            </Provider>
-        )
-    }
+    return <Provider store={store || myStore}>
+        <Modal />
+        <MainLayout {...pageProps}>
+            <Toolbar />
+            <Component {...pageProps}/>
+        </MainLayout>
+    </Provider>
 }
 
-//makeStore function that returns a new store for every request
-const makeStore = () => initializeStore()
+MyApp.getInitialProps = async ({Component, ctx}) => {
+    const pageProps = Component.getInitialProps
+        ? await Component.getInitialProps(ctx)
+        : {}
+
+    //Anything returned here can be accessed by the client
+    return {pageProps}
+}
 
 //withRedux wrapper that passes the store to the App Component
-export default withRedux(makeStore)(MyApp)
+export default wrapper.withRedux(MyApp)
