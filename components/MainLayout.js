@@ -50,8 +50,13 @@ const MainLayout = ({ children, dispatch, ...props }) => {
   if (!openSnackbar && props.notification.message) setOpenSnackbar(true)
   
   useEffect(() => {
-    const user = localStorage.getItem('user')
-    if (!props.auth.user && user) dispatch(setUser(user))
+    try {
+      const user = JSON.parse(localStorage.getItem('user') || '""')
+      if (!props.auth.user && user) dispatch(setUser(user))
+    } catch (e) {
+      localStorage.removeItem('user')
+      dispatch(setUser(null))
+    }
   })
 
   return (
