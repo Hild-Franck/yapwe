@@ -1,14 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { makeStyles } from '@material-ui/core/styles'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
-import Button from '@material-ui/core/Button'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 
+import LoginButton from './LoginButton'
+import SignupButton from './SignupButton'
 import { previousMonth, nextMonth, previousYear, nextYear } from '../ducks/main'
 import useStyles from './style/mainToolbar'
 
@@ -38,8 +38,8 @@ const MainToolbar = ({ dispatch, ...props}) => {
       </p>
     </div>
     {!props.auth.user && (<div  className={classes.user}>
-      <Button color="inherit" onClick={props.handleOpen('signup')}>Signup</Button>
-      <Button color="inherit" onClick={props.handleOpen('login')}>Login</Button>
+      <LoginButton />
+      <SignupButton />
     </div>) || (<div  className={classes.user}>
       <IconButton aria-controls={props.menuId} aria-haspopup="true" onClick={props.handleMenuOpen}>
         <AccountCircle />

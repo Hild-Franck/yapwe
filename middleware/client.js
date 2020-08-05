@@ -21,7 +21,7 @@ const clientMiddleware = () => ({dispatch, getState}) => next => action => {
 			return next({...rest, error: error.response.body, type: FAILURE})
 		}
 	).catch(error => {
-		dispatch(addMessage(`MIDDLEWARE ERROR: ${error}`))
+		dispatch(addMessage(`MIDDLEWARE ERROR: ${error}`, 'error'))
 		next({...rest, error, type: FAILURE})
 	})
 	return actionPromise
