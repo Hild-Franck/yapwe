@@ -8,6 +8,7 @@ import {
 
 const initialState = {
 	data: {},
+	ids: [],
 	loading: true
 }
 
@@ -22,16 +23,18 @@ export const reducer = (state=initialState, action) => {
 		case GET_MOOD_SUCCESS:
 			return {
 				...state,
-				data: reduce(action.result.data, (acc, mood) => {
-					const day = new Date(mood.day)
-					acc[day.getUTCDate()] = { ...mood, day }
-					return acc
-				}, {})
+				loading: false,
+				ids: action.result.data.map(({ _id, day, month, year }) =>
+					({ id: _id, day, month, year })),
+				data: reduce(action.result.data, (acc, mood) =>
+					({ ...acc, [mood._id]: mood })
+				, {})
 			}
 		case GET_MOOD_FAIL:
 			return {
 				...state,
-				loading: false
+				loading: false,
+				error: action.error
 			}
 		case CREATE_MOOD:
 			return {
@@ -39,17 +42,19 @@ export const reducer = (state=initialState, action) => {
 				loading: true
 			}
 			case CREATE_MOOD_SUCCESS:
-			day = new Date(action.result.data.day)
-			const newData = clone(state.data)
-			newData[day.getUTCDate()] = { ...action.result.data, day }
-			
 			return {
 				...state,
-				data: newData
+				loading: false,
+				ids: (({ _id, day, month, year }) => [
+					...state.ids,
+					{ id: _id, day, month, year }
+				])(action.result.data),
+				data: { ...state.data, [action.result.data._id]: action.result.data  }
 			}
 		case CREATE_MOOD_FAIL:
 			return {
 				...state,
+				loading: false,
 				error: action.error
 			}
 		case UPDATE_MOOD:

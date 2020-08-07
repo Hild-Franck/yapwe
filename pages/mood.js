@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import {connect} from 'react-redux'
-import { pickBy } from 'lodash'
+import { pickBy, find } from 'lodash'
 import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import Modal from '@material-ui/core/Modal'
 
+import Mood from '../components/Mood'
 import { getMood, createMood, updateMood } from '../ducks/mood'
 
 const dayInitial = ['M','T','W','T','F','S','S']
@@ -51,14 +52,14 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const Mood = props => {
+const Moods = props => {
   const classes = useStyles()
   const [modal, setModal] = React.useState(null)
 
   const date = props.date
-  const month = date.getMonth()
-  const year = date.getFullYear()
-  
+  const month = date.getUTCMonth()+1
+  const year = date.getUTCFullYear()
+
   useEffect(() => {
     props.dispatch(getMood(month, year))
   }, [month, year])
@@ -73,7 +74,7 @@ const Mood = props => {
     && weeks.push(Array(7).fill(true))
     || weeks.push(Array(weekEnd).fill(true).concat(Array(7-weekEnd).fill()))
   
-  const moods = pickBy(props.mood.data, mood => mood.day.getUTCMonth() == month && mood.day.getUTCFullYear() == year)
+  const moods = pickBy(props.ids, mood => mood.month == month && mood.year == year)
   
   const handleOpen = (month, day, year) => () => {
     setModal({month, day, year})
@@ -96,7 +97,7 @@ const Mood = props => {
             Select {modal && new Date(modal.year, modal.month, modal.day).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} mood:
           </h1>
           <Grid container spacing={3} justify="center" alignItems="center">
-            {moodScores.map(s => <Grid item onClick={() => props.dispatch(
+            {moodScores.map(s => <Grid key={s} item onClick={() => props.dispatch(
               moods[modal.day]
                 && updateMood(modal.day, modal.month, modal.year, s)
                 || createMood(modal.day, modal.month, modal.year, s)
@@ -109,21 +110,23 @@ const Mood = props => {
       <h1>Mood</h1>
       <Grid container spacing={3} justify="center" alignItems="center">
         <Grid container item xs={12} spacing={3} justify="center">
-          {dayInitial.map(v => <Grid item><Paper className={classes.paper}><span>{v}</span></Paper></Grid>)}
+          {dayInitial.map(v => <Grid key={v} item><Paper className={classes.paper}><span>{v}</span></Paper></Grid>)}
         </Grid>
-        {weeks.map((week, i) => <Grid container item xs={12} spacing={3} justify="center">
-          {week.map((day, j) => <Grid item onClick={handleOpen(month, ((i*7)-startingDay)+j+1, year)}><Paper className={`${classes.paper} ${moods[((i*7)-startingDay)+j+1] && classes[moods[((i*7)-startingDay)+j+1].score] || classes.default}`}>
-            {day && ((i*7)-startingDay)+j+1}
-          </Paper></Grid>)}
+        {weeks.map((week, i) => <Grid key={week+i} container item xs={12} spacing={3} justify="center">
+          {week.map((day, j) => {
+            const d = ((i*7)-startingDay)+j+1
+            const id = (find(moods, mood => mood.day == d)||{}).id
+            return <Mood key={id} id={id} day={d} displayDay={Boolean(day)} />
+        })}
         </Grid>)}
       </Grid>
     </div>
   )
 }
 
-Mood.getInitialProps = ({store}) => {}
+Moods.getInitialProps = ({store}) => {}
 
-const mapStateToProps = state => ({ mood: state.mood, date: state.mainReducer.date })
+const mapStateToProps = state => ({ ids: state.mood.ids, date: state.mainReducer.date })
 
-export default connect(mapStateToProps)(Mood)
+export default connect(mapStateToProps)(Moods)
 
