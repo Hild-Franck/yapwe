@@ -7,10 +7,10 @@ import { signup, addMessage } from '../ducks/main'
 
 
 const SignupForm = ({ handleSubmit, dispatch, closeModal }) => {
-  const onSubmit = values => dispatch(signup(values).then(result => {
+  const onSubmit = values => dispatch(signup(values)).then(result => {
     dispatch(addMessage("Your account has been created ! You can now log in."))
     closeModal()
-  }))
+  })
 
   return <Form noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
     <Field fullWidth label="Username" name="username" component={Input} type="text" />

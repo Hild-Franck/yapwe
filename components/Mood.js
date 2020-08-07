@@ -4,6 +4,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 
+import { setData } from '../ducks/modal'
+
 const useStyles = makeStyles(theme => ({
   paper: {
     height: '100px',
@@ -38,11 +40,13 @@ const moods = [
 
 ]
 
-const Mood = ({ mood, day, displayDay }) => {
+const Mood = ({ mood, date, displayDay, dispatch }) => {
   const classes = useStyles()
-  return <Grid item><Paper className={`${classes.paper} ${mood && classes[`${mood.score}`]}`}>
-    {mood ? mood.day : displayDay && day}
-  </Paper></Grid>
+  return <Grid item>
+    <Paper onClick={() => dispatch(setData('mood', { ...date, mood }))} className={`${classes.paper} ${mood && classes[`${mood.score}`]}`}>
+      {mood ? mood.day : displayDay && date.day}
+    </Paper>
+  </Grid>
 }
 
 const mapStateToProps = (_, ownProps) => state => ({

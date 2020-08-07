@@ -8,10 +8,12 @@ import useStyles from './style/modal'
 import { close } from '../ducks/modal'
 import SignupForm from './SignupForm'
 import LoginForm from './LoginForm'
+import MoodSelection from './MoodSelection'
 
 const modalType = {
   signup: SignupForm,
-  login: LoginForm
+  login: LoginForm,
+  mood: MoodSelection
 }
 
 

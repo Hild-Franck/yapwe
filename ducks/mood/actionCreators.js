@@ -14,13 +14,13 @@ export function getMood(month, year) {
 export function createMood(day, month, year, score) {
   return {
     types: [CREATE_MOOD, CREATE_MOOD_SUCCESS, CREATE_MOOD_FAIL],
-    promise: client => client.post('/mood', { date: Date.UTC(year, month, day, 0), score })
+    promise: client => client.post('/mood', { date: Date.UTC(year, month-1, day, 0), score })
   }
 }
 
 export function updateMood(day, month, year, score) {
   return {
     types: [UPDATE_MOOD, UPDATE_MOOD_SUCCESS, UPDATE_MOOD_FAIL],
-    promise: client => client.post(`/mood/${year}-${month<9?'0':''}${month+1}-${day<10?'0':''}${day}`, { score })
+    promise: client => client.post(`/mood/${year}-${month<9?'0':''}${month-1}-${day<10?'0':''}${day}`, { score })
   }
 }
