@@ -32,7 +32,7 @@ const Moods = props => {
   const year = date.getUTCFullYear()
 
   useEffect(() => {
-    props.dispatch(getMood(month, year))
+    props.dispatch(getMood(month+1, year))
   }, [month, year])
 
   const startingDay = new Date(year, month, 0).getDay()
@@ -45,7 +45,8 @@ const Moods = props => {
     && weeks.push(Array(7).fill(true))
     || weeks.push(Array(weekEnd).fill(true).concat(Array(7-weekEnd).fill()))
   
-  const moods = pickBy(props.ids, mood => mood.month == month && mood.year == year)
+  const moods = pickBy(props.ids, mood => mood.month == month+1 && mood.year == year)
+  console.log(moods);
   
   return (
     <div>
