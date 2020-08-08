@@ -63,14 +63,11 @@ export const reducer = (state=initialState, action) => {
 				loading: true
 			}
 			case UPDATE_MOOD_SUCCESS:
-			day = new Date(action.result.data.day)
-			const updatedData = clone(state.data)
-			updatedData[day.getUTCDate()] = { ...action.result.data, day }
-			
-			return {
-				...state,
-				data: updatedData
-			}
+				return {
+					...state,
+					loading: false,
+					data: { ...state.data, [action.result.data._id]: action.result.data }
+				}
 		case UPDATE_MOOD_FAIL:
 			return {
 				...state,

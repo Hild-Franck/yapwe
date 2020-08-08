@@ -21,6 +21,6 @@ export function createMood(day, month, year, score) {
 export function updateMood(day, month, year, score) {
   return {
     types: [UPDATE_MOOD, UPDATE_MOOD_SUCCESS, UPDATE_MOOD_FAIL],
-    promise: client => client.post(`/mood/${year}-${month<9?'0':''}${month-1}-${day<10?'0':''}${day}`, { score })
+    promise: client => client.post(`/mood/${year}-${month<9?'0':''}${month}-${day<10?'0':''}${day}`, { score })
   }
 }
