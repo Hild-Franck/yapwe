@@ -4,10 +4,24 @@ import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faSmile, faGrinHearts, faGrin, faMehBlank, faFrown, faAngry, faSadTear
+  faSmile, faDizzy, faGrin, faSurprise, faTired, faAngry, faSadTear, faMeh
 } from '@fortawesome/free-regular-svg-icons'
 
-const useStyles = makeStyles(theme => ({
+const moodIcon = [
+  { icon: faMeh, color: 30, desc: "Anticipative" },
+  { icon: faGrin, color: 60, desc: "Joyful" },
+  { icon: faSmile, color: 100, desc: "Trustful" },
+  { icon: faDizzy, color: 165, desc: "Fearful" },
+  { icon: faSurprise, color: 200, desc: "Surprised" },
+  { icon: faSadTear, color: 240, desc: "Sad" },
+  { icon: faTired, color: 270, desc: "Disgusted" },
+  { icon: faAngry, color: 360, desc: "Angry" }
+]
+
+const useStyles = makeStyles(theme => moodIcon.reduce((acc, mood, i) => {
+    acc[`${i}`] = { backgroundColor: `hsl(${mood.color}, 80%, 70%)` }
+    return acc
+  }, {
   paper: {
     height: '100px',
     width: '100px',
@@ -31,48 +45,18 @@ const useStyles = makeStyles(theme => ({
   },
   fa: {
     width: "80% !important",
+    color: 'rgba(255, 255, 255, 0.8)',
     height: "auto",
     margin: "auto"
-  },
-  '0': {
-    backgroundColor: 'pink',
-    color: 'white'
-  },
-  '1': {
-    backgroundColor: 'green',
-    color: 'white'
-  },
-  '2': {
-    backgroundColor: 'lightgreen',
-    color: 'white'
-  },
-  '3': {
-    backgroundColor: 'azure'
-  },
-  '4': {
-    backgroundColor: 'lightblue',
-    color: 'white'
-  },
-  '5': {
-    backgroundColor: 'red',
-    color: 'white'
-  },
-  '6': {
-    backgroundColor: 'blue',
-    color: 'white'
   },
   default: {
     backgroundColor: 'lightgrey'
   }
 }))
 
-const moodIcon = [
-  faGrinHearts, faGrin, faSmile, faMehBlank, faFrown, faAngry, faSadTear
-]
-
 const MoodDisplay = ({ score, children, ...props }) => {
   const classes = useStyles()
-  const icon = moodIcon[score] || null
+  const icon = (moodIcon[score] && moodIcon[score].icon) || null
   return <Grid item {...props}>
     <Paper className={`${classes.paper} ${classes[`${score}`]}`}>
       {!Number.isNaN(Number(score))
