@@ -5,9 +5,11 @@ import MoodDisplay from './MoodDisplay'
 import { setData } from '../ducks/modal'
 
 const Mood = ({ mood, date, displayDay, dispatch }) => {
-  return <MoodDisplay score={mood && mood.score} onClick={() => dispatch(setData('mood', { ...date, mood }))}>
-    {mood ? mood.day : displayDay && date.day}
-  </MoodDisplay>
+  return displayDay
+    ? <MoodDisplay score={mood && mood.score} onClick={() => dispatch(setData('mood', { ...date, mood }))}>
+      {mood ? mood.day : displayDay && date.day}
+    </MoodDisplay>
+    : <MoodDisplay score="default" />
 }
 
 const mapStateToProps = (_, ownProps) => state => ({

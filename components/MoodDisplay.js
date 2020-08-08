@@ -72,10 +72,13 @@ const moodIcon = [
 
 const MoodDisplay = ({ score, children, ...props }) => {
   const classes = useStyles()
-  const icon = moodIcon[score] || faSmile
+  const icon = moodIcon[score] || null
   return <Grid item {...props}>
     <Paper className={`${classes.paper} ${classes[`${score}`]}`}>
-      {score != undefined && <FontAwesomeIcon className={classes.fa} icon={icon} />}
+      {!Number.isNaN(Number(score))
+        ? <FontAwesomeIcon className={classes.fa} icon={icon} />
+        : null
+      }
       <div className={classes.children}>
         {children}
       </div>

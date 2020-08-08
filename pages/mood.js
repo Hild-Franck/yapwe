@@ -8,12 +8,14 @@ import Paper from '@material-ui/core/Paper'
 import Mood from '../components/Mood'
 import { getMood } from '../ducks/mood'
 
-const dayInitial = ['M','T','W','T','F','S','S']
+const dayInitial = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']
 
 const useStyles = makeStyles(theme => ({
   paper: {
     height: '100px',
     width: '100px',
+    fontWeight: "bold",
+    fontSize: theme.typography.h5.fontSize,
     textAlign: 'center',
     display: "flex",
     flexDirection: "column",
