@@ -28,7 +28,7 @@ const Moods = props => {
   const classes = useStyles()
 
   const date = props.date
-  const month = date.getUTCMonth()+1
+  const month = date.getUTCMonth()
   const year = date.getUTCFullYear()
 
   useEffect(() => {
