@@ -11,6 +11,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Snackbar from '@material-ui/core/Snackbar'
 import EmojiEmotions from '@material-ui/icons/EmojiEmotions'
+import ListIcon from '@material-ui/icons/List'
 import MuiAlert from '@material-ui/lab/Alert'
 
 import UserMenu from './UserMenu'
@@ -93,6 +94,10 @@ const MainLayout = ({ children, dispatch, ...props }) => {
             <ListItem button key="Mood" component={ButtonLink} href="/mood">
               <ListItemIcon><EmojiEmotions /></ListItemIcon>
               <ListItemText primary="Mood" />
+            </ListItem>
+            <ListItem button key="Note" component={ButtonLink} href="/note">
+              <ListItemIcon><ListIcon /></ListItemIcon>
+              <ListItemText primary="Note" />
             </ListItem>
           </List>
         </div>
