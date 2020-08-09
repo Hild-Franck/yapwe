@@ -23,8 +23,6 @@ const Notes = props => {
     props.ids.filter(id => id.month == month+1 && id.year == year),
     'day'
   )
-  console.log(notes);
-  
   return (
     <div>
       <h1>Notes</h1>

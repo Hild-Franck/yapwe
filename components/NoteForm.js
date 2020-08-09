@@ -33,6 +33,7 @@ const NoteForm = ({ handleSubmit, dispatch, closeModal }) => {
       <Grid container justify="space-around">
         <KeyboardDatePicker
           disableToolbar
+          autoOk
           variant="inline"
           format="yyyy-MM-dd"
           margin="normal"
