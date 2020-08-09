@@ -12,10 +12,10 @@ export function getNote(month, year) {
   }
 }
 
-export function createNote(day, month, year, text) {
+export function createNote(day, month, year, text, important) {
   return {
     types: [CREATE_NOTE, CREATE_NOTE_SUCCESS, CREATE_NOTE_FAIL],
-    promise: client => client.post('/note', { date: Date.UTC(year, month, day, 0), text })
+    promise: client => client.post('/note', { date: Date.UTC(year, month, day, 0), text, important })
   }
 }
 

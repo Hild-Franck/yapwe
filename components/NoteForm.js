@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { Field, FieldArray, Form, reduxForm } from 'redux-form'
 import 'date-fns'
 import Button from '@material-ui/core/Button'
+import Checkbox from '@material-ui/core/Checkbox'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Grid from '@material-ui/core/Grid'
 import DateFnsUtils from '@date-io/date-fns'
 import {
@@ -14,18 +16,23 @@ import {
 import Input from './Input'
 import { createNote } from '../ducks/note'
 
+const CheckBoxInput = props => <FormControlLabel
+  control={<Input component={Checkbox} {...props} />}
+  label={props.label}
+/>
+
 const NoteForm = ({ handleSubmit, dispatch, closeModal }) => {
   const day = (d => `${d<10?'0':''}${d}`)(new Date().getDate())
   const [selectedDate, setSelectedDate] = React.useState(new Date(2020,7, day))
   const handleDateChange = (date) => {
     setSelectedDate(date)
   }
-  const onSubmit = ({ text }) => {
+  const onSubmit = ({ text, important }) => {
     const d = selectedDate.getDate()
     const m = selectedDate.getMonth()
     const y = selectedDate.getFullYear()
     console.log(d, m, y, text);
-    dispatch(createNote(d, m, y, text))
+    dispatch(createNote(d, m, y, text, important))
     closeModal()
   }
   return <Form noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
@@ -48,7 +55,8 @@ const NoteForm = ({ handleSubmit, dispatch, closeModal }) => {
       </Grid>
     </MuiPickersUtilsProvider>
     <Field fullWidth label="Note" name="text" component={Input} type="text" />
-    <Button type="submit">Send</Button>
+    <Field fullWidth label="Important" name="important" component={CheckBoxInput} />
+    <p><Button type="submit">Send</Button></p>
   </Form>
 }
 
