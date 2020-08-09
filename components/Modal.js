@@ -9,11 +9,13 @@ import { close } from '../ducks/modal'
 import SignupForm from './SignupForm'
 import LoginForm from './LoginForm'
 import MoodSelection from './MoodSelection'
+import NoteForm from './NoteForm'
 
 const modalType = {
   signup: SignupForm,
   login: LoginForm,
-  mood: MoodSelection
+  mood: MoodSelection,
+  note: NoteForm,
 }
 
 
