@@ -18,7 +18,6 @@ const Notes = props => {
     props.dispatch(getNote(month+1, year))
   }, [month, year])
 
-
   const notes = groupBy(
     props.ids.filter(id => id.month == month+1 && id.year == year),
     'day'

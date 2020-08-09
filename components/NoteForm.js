@@ -13,7 +13,7 @@ import {
 } from '@material-ui/pickers'
 
 import Input from './Input'
-import { createNote, updateNote } from '../ducks/note'
+import { createNote, updateNote, deleteNote } from '../ducks/note'
 
 const CheckBoxInput = props => <FormControlLabel
   control={<Input component={Checkbox} {...props} checked={props.input.value} />}
@@ -58,7 +58,18 @@ const NoteForm = ({ handleSubmit, dispatch, closeModal, initialValues }) => {
     <Field fullWidth name="date" component={DatePicker} />
     <Field fullWidth label="Note" name="text" component={Input} type="text" />
     <Field label="Important" name="important" component={CheckBoxInput} />
-    <p><Button type="submit">Send</Button></p>
+    <p>
+      <Button type="submit">Send</Button>
+      {initialValues._id && 
+        <Button
+          onClick={() => (dispatch(deleteNote(initialValues._id)), closeModal())}
+          color="secondary"
+          variant="contained"
+        >
+        Delete
+        </Button>
+      }
+    </p>
   </Form>
 }
 

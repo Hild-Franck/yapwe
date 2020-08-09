@@ -83,8 +83,8 @@ export const reducer = (state=initialState, action) => {
 			return {
 				...state,
 				loading: false,
-				ids: state.ids.filter(id => id.id !== action.result.data._id),
-				data: omit(state.data, [action.result.data._id]),
+				ids: state.ids.filter(id => id.id !== action.result.data),
+				data: omit(state.data, [action.result.data]),
 			}
 		case DELETE_NOTE_FAIL:
 			return {
