@@ -19,10 +19,10 @@ export function createNote(day, month, year, text, important) {
   }
 }
 
-export function updateNote(id, text) {
+export function updateNote(id, text, important) {
   return {
     types: [UPDATE_NOTE, UPDATE_NOTE_SUCCESS, UPDATE_NOTE_FAIL],
-    promise: client => client.post(`/note/${id}`, { text })
+    promise: client => client.post(`/note/${id}`, { text, important })
   }
 }
 

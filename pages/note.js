@@ -26,7 +26,7 @@ const Notes = props => {
   return (
     <div>
       <h1>Notes</h1>
-      <AddNoteButton />
+      <AddNoteButton month={month} year={year} />
       {map(notes, (note, day) => <div>
         <h2>{Intl.DateTimeFormat(undefined, { day: 'numeric', month: 'long' }).format(new Date(year, month, day))}</h2>
         {note.map(({ id }) => <Note id={id} />)}

@@ -10,7 +10,7 @@ const AddNoteButton = ({ dispatch, year, month }) => <Button
   variant="contained"
   color="primary"
   startIcon={<PersonAddIcon>add</PersonAddIcon>}
-  onClick={() => dispatch(setData('note', { month, year }))}
+  onClick={() => dispatch(setData('note', { date: new Date(year, month, new Date().getUTCDate()) }))}
 >
   Add
 </Button>
