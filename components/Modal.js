@@ -10,12 +10,14 @@ import SignupForm from './SignupForm'
 import LoginForm from './LoginForm'
 import MoodSelection from './MoodSelection'
 import NoteForm from './NoteForm'
+import HabitForm from './HabitForm'
 
 const modalType = {
   signup: SignupForm,
   login: LoginForm,
   mood: MoodSelection,
   note: NoteForm,
+  habit: HabitForm
 }
 
 
